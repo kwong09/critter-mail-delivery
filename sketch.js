@@ -6,6 +6,7 @@
 let spinningShape;
 let highScore = 0;
 let screen = "home";
+let bunny, ground;
 
 function setup() {
     createCanvas(800, 500);
@@ -57,37 +58,13 @@ function draw() {
 
 
         //bunny movement
-        if (kb.pressing('right') || kb.pressing('d')) {
-            bunny.vel.x = 3;
-            bunny.changeAni('right');
-        } else if (kb.pressing('left') || kb.pressing('a')) {
-            bunny.vel.x = -3;
-        } else if (!keyIsPressed) {
-            bunny.vel.x = 0;
-            bunny.changeAni('still');
-        }
+        moveBunny(bunny, 110, 1000);
 
-        if (bunny.x >= 750 && bunny.x <= 800) {
-            enteringOffice = true;
-            enterOffice.x = 775;
-            enterOffice.y = 200;
-            cursorHovering(enterOffice)
-
-        } else {
-            enterOffice.x = -500;
-            enterOffice.y = -500;
-            mouse.cursor = 'default';
-        }
-
-        if (bunny.x <= 110) {
-            bunny.x = 110;
-        }
+        buttonAppear(bunny, enterOffice, 775, 450, 750, 800);
 
         if (enterOffice.mouse.presses()) {
             mainPlazaScreen("close");
             screen = "postOffice";
-            camera.x = 0;
-            camera.y = 0;
             postOfficeScreen("open");
         }
     }
@@ -101,16 +78,39 @@ function draw() {
         mouse.cursor = 'default';
 
         if (worldMap.mouse.presses()) {
+            postOfficeScreen("close");
             screen = "worldMap";
+            worldMapScreen("open");
         }
 
     }
 
     if (screen == "worldMap") {
+        background("#5dc0d6ff");
+        forestMap.draw();
+        underwaterMap.draw();
+        desertMap.draw();
+        mouse.cursor = 'default';
+
+        if (forestMap.mouse.presses()) {
+            forestMapScreen("open");
+            screen = "forestMap";
+            worldMapScreen("close");
+        }
 
     }
 
     if (screen == "forestMap") {
+        background("#c1f4ffff");
+        text("X Value: " + forestBunny.x, 50, 50);
+        // camera follows bunny
+        camera.x = forestBunny.x + 100;
+        forestGround.x = camera.x; 
+
+
+        //bunny movement
+        moveBunny(forestBunny, 110, 1000);
+        buttonAppear(forestBunny, forestTalk1, 775, 450);
 
     }
 
@@ -123,6 +123,9 @@ function draw() {
     }
 
 }
+
+
+//functions
 
 
 function cursorHovering(object) {
@@ -186,7 +189,7 @@ function postOfficeScreen(openClose) {
 
         worldMap = new Sprite(250, 425, 100, 100);
         worldMap.collider = 's';
-        worldMap.color = "pink";
+        worldMap.color = "#ff75b1ff";
         worldMap.layer = 4;
 
         shop = new Sprite(400, 425, 100, 100);
@@ -198,5 +201,110 @@ function postOfficeScreen(openClose) {
         mail.collider = 's';
         mail.color = "gray";
         mail.layer = 4;
+
+    } else if (openClose == "close") {
+        menuBar.pos = {x: -1000, y: -1000};
+        worldMap.pos = {x: -1000, y: -1000};
+        shop.pos = {x: -1000, y: -1000};
+        mail.pos = {x: -1000, y: -1000};
+    }
+}
+
+function worldMapScreen(openClose) {
+    if (openClose == "open") {
+        forestMap = new Sprite(300, 250, 75, 75);
+        forestMap.collider = 's';
+        forestMap.color = "#89d580ee";
+
+        underwaterMap = new Sprite(400, 250, 75, 75);
+        underwaterMap.collider = 's';
+        underwaterMap.color = "#cae1fdee";
+
+        desertMap = new Sprite(500, 250, 75, 75);
+        desertMap.collider = 's';
+        desertMap.color = "#d6de8cee";
+    }
+
+    if (openClose == "close") {
+        forestMap.pos = {x: -1000, y: -1000};
+        underwaterMap.pos = {x: -1000, y: -1000};
+        desertMap.pos = {x: -1000, y: -1000};
+    }
+}
+
+
+// map screens
+function forestMapScreen(openClose) {
+
+    if (openClose == "open") {
+
+        // main plaza sprites
+        forestGround = new Sprite(width / 2, height - 60, 800, 120);
+        forestGround.collider = 's';
+        forestGround.color = "lightgreen";
+        forestGround.friction = 0;
+
+        forestBunny = new Sprite(200, 300, 100, 125);
+        forestBunny.collider = 'd';
+        forestBunny.color = "white";
+        forestBunny.rotationLock = true;
+        forestBunny.addAni('right', bunnyRight);
+        forestBunny.ani.scale = 0.25;
+        forestBunny.addAni('still', bunnyStill);
+        forestBunny.ani.scale = 0.25;
+
+        forestHome1 = new Sprite(900, 230, 600, 300);
+        forestHome1.color = "#f292f2ff";
+        forestHome1.collider = 'n';
+        forestHome1.layer = 1;
+
+        forestTalk1 = new Sprite(-1000, -1000, 200, 50);
+        forestTalk1.collider = 's';
+        forestTalk1.color = "white";
+        forestTalk1.layer = 4;
+        forestTalk1.text = 'Talk to Forest Character 1';
+        
+        camera.x = 400;
+        camera.y = 250;
+    }
+}
+
+
+function moveBunny(bunny, lim1, lim2) {
+    
+    if (kb.pressing('right') || kb.pressing('d')) {
+        bunny.vel.x = 3;
+        bunny.scale.x = 1;
+        bunny.changeAni('right');
+    } else if (kb.pressing('left') || kb.pressing('a')) {
+        bunny.vel.x = -3;
+        bunny.scale.x = -1;
+        bunny.changeAni('right');
+    } else if (!keyIsPressed) {
+        bunny.vel.x = 0;
+        bunny.scale.x = 1;
+        bunny.changeAni('still');
+    }
+
+    if (bunny.x <= lim1) {
+        bunny.x = lim1;
+    }
+
+    if (bunny.x >= lim2) {
+        bunny.x = lim2;
+    }
+}
+
+
+function buttonAppear(bunny, button, x, y, lim1, lim2) {
+    if (bunny.x >= lim1 && bunny.x <= lim2) {
+        button.x = x;
+        button.y = y;
+        cursorHovering(button)
+
+    } else {
+        button.x = -1000;
+        button.y = -1000;
+        mouse.cursor = 'default';
     }
 }
