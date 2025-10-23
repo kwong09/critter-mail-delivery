@@ -1,12 +1,7 @@
-// a simple game where you click to drop a ball and 
-// try to get as many balls as possible on the spinning shape
-// move the mouse up and down to change the rotation speed of the shape
-// use the right and left keys to make the shape larger or smaller
-
 let spinningShape;
 let highScore = 0;
 let screen = "home";
-let bunny, ground;
+let bunny, ground, forestBunny;
 
 function setup() {
     createCanvas(800, 500);
@@ -43,8 +38,14 @@ function draw() {
         if (startButton.mouse.presses()) {
             screen = "mainPlaza";
             startButton.pos = {x: -500, y: -500};
+        
+        
 
             mainPlazaScreen("open");
+
+            postOfficeButton = new Sprite(-1000, -1000, 50, 50);
+            postOfficeButton.collider = 'static';
+            postOfficeButton.fill = '#e82626ff';
         }
     }
 
@@ -55,7 +56,6 @@ function draw() {
         // camera follows bunny
         camera.x = bunny.x + 100;
         ground.x = camera.x; 
-
 
         //bunny movement
         moveBunny(bunny, 110, 1000);
@@ -93,7 +93,11 @@ function draw() {
         mouse.cursor = 'default';
 
         if (forestMap.mouse.presses()) {
-            forestMapScreen("open");
+            if (forestBunny) {
+                forestMapScreen("openAgain");
+            } else {
+                forestMapScreen("open");
+            }
             screen = "forestMap";
             worldMapScreen("close");
         }
@@ -107,10 +111,26 @@ function draw() {
         camera.x = forestBunny.x + 100;
         forestGround.x = camera.x; 
 
+        //return to post office 
+        postOfficeButton.y = 450;
+        postOfficeButton.x = camera.x - 350;
 
         //bunny movement
         moveBunny(forestBunny, 110, 1000);
-        buttonAppear(forestBunny, forestTalk1, 775, 450);
+        buttonAppear(forestBunny, forestTalk1, 775, 450, 750, 800);
+
+        if (postOfficeButton.mouse.presses()) {
+            forestMapScreen("close");
+            screen = "postOffice";
+            postOfficeScreen("open");
+            postOfficeButton.pos = {x: -1000, y: -1000};
+        }
+
+        if (forestTalk1.mouse.presses()) {
+            forestMapScreen("close");
+            screen = "talkingScreen";
+            talkingScreen("open");
+        }
 
     }
 
@@ -122,10 +142,19 @@ function draw() {
 
     }
 
+    if (screen == "talkingScreen") {
+        background("#5dc0d6ff");
+        talkingCharacter.draw();
+        talkingGiveMail.draw();
+        speechBubble.draw();
+        mouse.cursor = 'default';
+
+    }
+
 }
 
 
-//functions
+//screen functions
 
 
 function cursorHovering(object) {
@@ -237,12 +266,12 @@ function worldMapScreen(openClose) {
 function forestMapScreen(openClose) {
 
     if (openClose == "open") {
-
-        // main plaza sprites
+        
         forestGround = new Sprite(width / 2, height - 60, 800, 120);
         forestGround.collider = 's';
         forestGround.color = "lightgreen";
         forestGround.friction = 0;
+        forestGround.layer = 0;
 
         forestBunny = new Sprite(200, 300, 100, 125);
         forestBunny.collider = 'd';
@@ -266,8 +295,39 @@ function forestMapScreen(openClose) {
         
         camera.x = 400;
         camera.y = 250;
+
+    } else if (openClose == "openAgain") {
+        forestGround.pos = {x: width / 2, y: height - 60};
+        forestBunny.pos = {x: 200, y: 300};
+        forestHome1.pos = {x: 900, y: 230};
+        forestTalk1.pos = {x: -1000, y: -1000};
+    } else if (openClose == "close") {
+        forestGround.pos = {x: -1000, y: -1000};
+        forestBunny.pos = {x: -1000, y: -1000};
+        forestHome1.pos = {x: -1000, y: -1000};
+        forestTalk1.pos = {x: -1000, y: -1000};
     }
 }
+
+function talkingScreen(openClose) {
+    if (openClose == "open") {
+        talkingCharacter = new Sprite(200, 300, 200, 300);
+        talkingCharacter.collider = 's';
+
+        speechBubble = new Sprite(550, 200, 350, 250);
+        speechBubble.collider = 's';
+
+        talkingGiveMail = new Sprite(550, 400, 160, 50);
+        talkingGiveMail.text = "give mail";
+        talkingGiveMail.collider = 's';
+        
+        camera.x = 0;
+        camera.y = 0;
+    }
+}
+
+
+//game functions
 
 
 function moveBunny(bunny, lim1, lim2) {
