@@ -1,7 +1,9 @@
-let spinningShape;
-let highScore = 0;
+let money = 0;
 let screen = "home";
+let mailOwners = ["bear"];
+let currentMailOwner = mailOwners[0];
 let bunny, ground, forestBunny;
+let characterTalking = "";
 
 function setup() {
     createCanvas(800, 500);
@@ -20,6 +22,10 @@ function setup() {
     bunnyRight.scale = 0.25;
     bunnyStill = loadAni('/assets/bunnyStill.png');
     bunnyStill.scale = 0.25;
+
+    //load images
+    postOfficeImg = loadImage('/assets/postOffice.png');
+    bearHome = loadImage('/assets/bearHome.png');
 }
 
 function draw() {
@@ -51,6 +57,8 @@ function draw() {
 
     if (screen == "mainPlaza") {
         background('lightblue');
+        text("$" + money, 750, 50);
+        
         mouse.cursor = 'default';
         text("X Value: " + bunny.x, 50, 50);
         // camera follows bunny
@@ -60,7 +68,7 @@ function draw() {
         //bunny movement
         moveBunny(bunny, 110, 1000);
 
-        buttonAppear(bunny, enterOffice, 775, 450, 750, 800);
+        buttonAppear(bunny, enterOffice, 715, 450, 660, 770);
 
         if (enterOffice.mouse.presses()) {
             mainPlazaScreen("close");
@@ -71,6 +79,8 @@ function draw() {
 
     if (screen == "postOffice") {
         background("lightyellow");
+        text("$" + money, 750, 50);
+        
         menuBar.draw();
         worldMap.draw();
         shop.draw();
@@ -81,6 +91,12 @@ function draw() {
             postOfficeScreen("close");
             screen = "worldMap";
             worldMapScreen("open");
+        }
+
+        if (mail.mouse.presses()) {
+            postOfficeScreen("close");
+            screen = "mail";
+            mailScreen("open");
         }
 
     }
@@ -106,6 +122,8 @@ function draw() {
 
     if (screen == "forestMap") {
         background("#c1f4ffff");
+        text("$" + money, 750, 50);
+
         text("X Value: " + forestBunny.x, 50, 50);
         // camera follows bunny
         camera.x = forestBunny.x + 100;
@@ -127,6 +145,7 @@ function draw() {
         }
 
         if (forestTalk1.mouse.presses()) {
+            characterTalking = "bear";
             forestMapScreen("close");
             screen = "talkingScreen";
             talkingScreen("open");
@@ -147,8 +166,42 @@ function draw() {
         talkingCharacter.draw();
         talkingGiveMail.draw();
         speechBubble.draw();
+        backButton.draw();
         mouse.cursor = 'default';
 
+        if (backButton.mouse.presses()) {
+            talkingScreen("close");
+            screen = "forestMap";
+            forestMapScreen("openAgain");
+        }
+
+        if (talkingGiveMail.mouse.presses()) {
+            if (currentMailOwner == characterTalking) {
+                money += 50;
+                talkingScreen("close");
+                screen = "postOffice";
+                postOfficeScreen("openAgain");
+
+            } else {
+                money -= 50;
+                talkingScreen("close");
+                screen = "postOffice";
+                postOfficeScreen("openAgain");
+            }
+        }
+
+    }
+
+    if (screen == "mail") {
+        background("#f8eac7ff");
+        returnToOffice.draw();
+        text("This is your mail \n more mail!", 50, 50);
+
+        if (returnToOffice.mouse.presses()) {
+            mailScreen("close");
+            screen = "postOffice";
+            postOfficeScreen("openAgain");
+        }
     }
 
 }
@@ -187,7 +240,9 @@ function mainPlazaScreen(openClose) {
 
         postOffice = new Sprite(900, 230, 600, 300);
         postOffice.collider = 'n';
-        postOffice.layer = 1;
+        postOffice.layer = -1;
+        postOffice.image = postOfficeImg;
+        postOffice.ani.scale = 0.5;
 
         enterOffice = new Sprite(-500, -500, 200, 50);
         enterOffice.collider = 's';
@@ -230,12 +285,23 @@ function postOfficeScreen(openClose) {
         mail.collider = 's';
         mail.color = "gray";
         mail.layer = 4;
+        
+        camera.x = 0;
+        camera.y = 0;
 
     } else if (openClose == "close") {
         menuBar.pos = {x: -1000, y: -1000};
         worldMap.pos = {x: -1000, y: -1000};
         shop.pos = {x: -1000, y: -1000};
         mail.pos = {x: -1000, y: -1000};
+    } else if (openClose == "openAgain") {
+        menuBar.pos = {x: 400, y: 450};
+        worldMap.pos = {x: 250, y: 425};
+        shop.pos = {x: 400, y: 425};
+        mail.pos = {x: 550, y: 425};
+        
+        camera.x = 0;
+        camera.y = 0;
     }
 }
 
@@ -252,9 +318,7 @@ function worldMapScreen(openClose) {
         desertMap = new Sprite(500, 250, 75, 75);
         desertMap.collider = 's';
         desertMap.color = "#d6de8cee";
-    }
-
-    if (openClose == "close") {
+    } else if (openClose == "close") {
         forestMap.pos = {x: -1000, y: -1000};
         underwaterMap.pos = {x: -1000, y: -1000};
         desertMap.pos = {x: -1000, y: -1000};
@@ -283,15 +347,21 @@ function forestMapScreen(openClose) {
         forestBunny.ani.scale = 0.25;
 
         forestHome1 = new Sprite(900, 230, 600, 300);
-        forestHome1.color = "#f292f2ff";
         forestHome1.collider = 'n';
         forestHome1.layer = 1;
+        forestHome1.image = bearHome;
+        forestHome1.ani.scale = 0.5;
 
         forestTalk1 = new Sprite(-1000, -1000, 200, 50);
         forestTalk1.collider = 's';
         forestTalk1.color = "white";
         forestTalk1.layer = 4;
         forestTalk1.text = 'Talk to Forest Character 1';
+
+        forestHome2 = new Sprite(900, 230, 600, 300);
+        forestHome2.color = "#f09191ff";
+        forestHome2.collider = 'n';
+        forestHome2.layer = 1;
         
         camera.x = 400;
         camera.y = 250;
@@ -301,6 +371,9 @@ function forestMapScreen(openClose) {
         forestBunny.pos = {x: 200, y: 300};
         forestHome1.pos = {x: 900, y: 230};
         forestTalk1.pos = {x: -1000, y: -1000};
+
+        camera.x = 400;
+        camera.y = 250;
     } else if (openClose == "close") {
         forestGround.pos = {x: -1000, y: -1000};
         forestBunny.pos = {x: -1000, y: -1000};
@@ -314,15 +387,36 @@ function talkingScreen(openClose) {
         talkingCharacter = new Sprite(200, 300, 200, 300);
         talkingCharacter.collider = 's';
 
-        speechBubble = new Sprite(550, 200, 350, 250);
+        speechBubble = new Sprite(550, 250, 350, 250);
         speechBubble.collider = 's';
 
-        talkingGiveMail = new Sprite(550, 400, 160, 50);
+        talkingGiveMail = new Sprite(550, 450, 160, 50);
         talkingGiveMail.text = "give mail";
         talkingGiveMail.collider = 's';
+
+        backButton = new Sprite(700, 60, 100, 50);
+        backButton.text = "back";
+        backButton.collider = 's';
         
         camera.x = 0;
         camera.y = 0;
+    } else if (openClose == "close") {
+        talkingCharacter.pos = {x: -1000, y: -1000};
+        speechBubble.pos = {x: -1000, y: -1000};
+        talkingGiveMail.pos = {x: -1000, y: -1000};
+        backButton.pos = {x: -1000, y: -1000};
+    }
+}
+
+function mailScreen(openClose) {
+    if (openClose == "open") { 
+        returnToOffice = new Sprite(width / 2, 425, 150, 75);
+        returnToOffice.collider = 's';
+        returnToOffice.color = "white";
+        returnToOffice.text = 'Return to Post Office';
+
+    } else if (openClose == "close") {
+        returnToOffice.pos = {x: -1000, y: -1000};
     }
 }
 
