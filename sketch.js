@@ -1,6 +1,6 @@
 let money = 0;
 let screen = "home";
-let mailOwners = ["bear"];
+let mailOwners = ["bear", "squirrel", "deer"];
 let currentMailOwner = mailOwners[0];
 let bunny, ground, forestBunny;
 let characterTalking = "";
@@ -26,6 +26,18 @@ function setup() {
     //load images
     postOfficeImg = loadImage('/assets/postOffice.png');
     bearHome = loadImage('/assets/bearHome.png');
+    squirrelHome = loadImage('/assets/squirrelHome.png');
+    deerHome = loadImage('/assets/deerHome.png');
+    cloudyBackground = loadImage('/assets/cloudyBackground.png');
+    forestBackground = loadImage('/assets/forestBackground.png');
+
+    bear = loadImage('/assets/bear.png');
+    deer = loadImage('/assets/deer.png');
+    squirrel = loadImage('/assets/squirrel.png');
+
+    worldMapIcon = loadImage('/assets/worldMapIcon.png');
+    shopIcon = loadImage('/assets/shopIcon.png');
+    mailIcon = loadImage('/assets/mailIcon.png');
 }
 
 function draw() {
@@ -83,9 +95,14 @@ function draw() {
         
         menuBar.draw();
         worldMap.draw();
+        worldMap.ani.scale = 0.08;
         shop.draw();
+        shop.ani.scale = 0.08;
         mail.draw();
+        mail.ani.scale = 0.08;
         mouse.cursor = 'default';
+        
+        
 
         if (worldMap.mouse.presses()) {
             postOfficeScreen("close");
@@ -121,7 +138,7 @@ function draw() {
     }
 
     if (screen == "forestMap") {
-        background("#c1f4ffff");
+        background(forestBackground);
         text("$" + money, 750, 50);
 
         text("X Value: " + forestBunny.x, 50, 50);
@@ -134,8 +151,10 @@ function draw() {
         postOfficeButton.x = camera.x - 350;
 
         //bunny movement
-        moveBunny(forestBunny, 110, 1000);
-        buttonAppear(forestBunny, forestTalk1, 775, 450, 750, 800);
+        moveBunny(forestBunny, 110, 5000);
+        buttonAppear(forestBunny, forestTalk1, 810, 450, 760, 880);
+        buttonAppear(forestBunny, forestTalk2, 1470, 450, 1420, 1520);
+        buttonAppear(forestBunny, forestTalk3, 2270, 450, 2130, 2380);
 
         if (postOfficeButton.mouse.presses()) {
             forestMapScreen("close");
@@ -149,6 +168,25 @@ function draw() {
             forestMapScreen("close");
             screen = "talkingScreen";
             talkingScreen("open");
+
+            talkingCharacter.image = bear;
+            talkingCharacter.ani.scale = 0.5;
+        } else if (forestTalk2.mouse.presses()) {
+            characterTalking = "deer";
+            forestMapScreen("close");
+            screen = "talkingScreen";
+            talkingScreen("open");
+
+            talkingCharacter.image = deer;
+            talkingCharacter.ani.scale = 0.5;
+        } else if (forestTalk3.mouse.presses()) {
+            characterTalking = "squirrel";
+            forestMapScreen("close");
+            screen = "talkingScreen";
+            talkingScreen("open");
+
+            talkingCharacter.image = squirrel;
+            talkingCharacter.ani.scale = 0.5;
         }
 
     }
@@ -228,7 +266,7 @@ function mainPlazaScreen(openClose) {
         // main plaza sprites
         ground = new Sprite(width / 2, height - 60, 800, 120);
         ground.collider = 's';
-        ground.color = "lightgreen";
+        ground.color = "#76BE80";
         ground.friction = 0;
 
         bunny = new Sprite(200, 300, 100, 125);
@@ -273,17 +311,20 @@ function postOfficeScreen(openClose) {
 
         worldMap = new Sprite(250, 425, 100, 100);
         worldMap.collider = 's';
-        worldMap.color = "#ff75b1ff";
+        worldMap.image = worldMapIcon;
+        worldMap.ani.scale = 0.08;
         worldMap.layer = 4;
 
         shop = new Sprite(400, 425, 100, 100);
         shop.collider = 's';
-        shop.color = "lavender";
+        shop.image = shopIcon;
+        shop.ani.scale = 0.08;
         shop.layer = 4;
 
         mail = new Sprite(550, 425, 100, 100);
         mail.collider = 's';
-        mail.color = "gray";
+        mail.image = mailIcon;
+        mail.ani.scale = 0.08;
         mail.layer = 4;
         
         camera.x = 0;
@@ -358,10 +399,29 @@ function forestMapScreen(openClose) {
         forestTalk1.layer = 4;
         forestTalk1.text = 'Talk to Forest Character 1';
 
-        forestHome2 = new Sprite(900, 230, 600, 300);
-        forestHome2.color = "#f09191ff";
+        forestHome2 = new Sprite(1600, 230, 600, 300);
         forestHome2.collider = 'n';
         forestHome2.layer = 1;
+        forestHome2.image = deerHome;
+        forestHome2.ani.scale = 0.5;
+
+        forestTalk2 = new Sprite(-1000, -1000, 200, 50);
+        forestTalk2.collider = 's';
+        forestTalk2.color = "white";
+        forestTalk2.layer = 4;
+        forestTalk2.text = 'Talk to Forest Character 2';
+
+        forestHome3 = new Sprite(2300, 230, 600, 300);
+        forestHome3.collider = 'n';
+        forestHome3.layer = 1;
+        forestHome3.image = squirrelHome;
+        forestHome3.ani.scale = 0.5;
+
+        forestTalk3 = new Sprite(-1000, -1000, 200, 50);
+        forestTalk3.collider = 's';
+        forestTalk3.color = "white";
+        forestTalk3.layer = 4;
+        forestTalk3.text = 'Talk to Forest Character 3';
         
         camera.x = 400;
         camera.y = 250;
@@ -371,6 +431,10 @@ function forestMapScreen(openClose) {
         forestBunny.pos = {x: 200, y: 300};
         forestHome1.pos = {x: 900, y: 230};
         forestTalk1.pos = {x: -1000, y: -1000};
+        forestHome2.pos = {x: 1600, y: 230};
+        forestTalk2.pos = {x: -1000, y: -1000};
+        forestHome3.pos = {x: 2300, y: 230};
+        forestTalk3.pos = {x: -1000, y: -1000};
 
         camera.x = 400;
         camera.y = 250;
@@ -379,6 +443,10 @@ function forestMapScreen(openClose) {
         forestBunny.pos = {x: -1000, y: -1000};
         forestHome1.pos = {x: -1000, y: -1000};
         forestTalk1.pos = {x: -1000, y: -1000};
+        forestHome2.pos = {x: -1000, y: -1000};
+        forestTalk2.pos = {x: -1000, y: -1000};
+        forestHome3.pos = {x: -1000, y: -1000};
+        forestTalk3.pos = {x: -1000, y: -1000};
     }
 }
 
@@ -386,6 +454,8 @@ function talkingScreen(openClose) {
     if (openClose == "open") {
         talkingCharacter = new Sprite(200, 300, 200, 300);
         talkingCharacter.collider = 's';
+        talkingCharacter.image = bear;
+        talkingCharacter.ani.scale = 0.5;
 
         speechBubble = new Sprite(550, 250, 350, 250);
         speechBubble.collider = 's';
