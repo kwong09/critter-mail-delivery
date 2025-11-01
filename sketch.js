@@ -21,37 +21,37 @@ function setup() {
     startButton.fill = "#FDEBDE";
 
     //load animations
-    bunnyRight = loadAni('/assets/bunnyRight.gif');
+    bunnyRight = loadAni('https://kwong09.github.io/critter-mail-delivery/assets/bunnyRight.gif');
     bunnyRight.scale = 0.25;
-    bunnyStill = loadAni('/assets/bunnyStill.png');
+    bunnyStill = loadAni('https://kwong09.github.io/critter-mail-delivery/assets/bunnyStill.png');
     bunnyStill.scale = 0.25;
 
     //load images
-    postOfficeImg = loadImage('/assets/postOffice.png');
-    bearHome = loadImage('/assets/bearHome.png');
-    squirrelHome = loadImage('/assets/squirrelHome.png');
-    deerHome = loadImage('/assets/deerHome.png');
-    cloudyBackground = loadImage('/assets/cloudyBackground.png');
-    forestBackground = loadImage('/assets/forestBackground.png');
-    worldMapBackground = loadImage('/assets/worldMapBackground.png');
-    bearBackground = loadImage('/assets/bearBackground.png');
-    deerBackground = loadImage('/assets/deerBackground.png');
-    squirrelBackground = loadImage('/assets/squirrelBackground.png');
-    homeBackground = loadImage('/assets/homeBackground.png');
-    mailBackground = loadImage('/assets/mailBackground.png');
-    postOfficeBackground = loadImage('/assets/postOfficeBackground.png');
+    postOfficeImg = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/postOffice.png');
+    bearHome = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/bearHome.png');
+    squirrelHome = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/squirrelHome.png');
+    deerHome = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/deerHome.png');
+    cloudyBackground = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/cloudyBackground.png');
+    forestBackground = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/forestBackground.png');
+    worldMapBackground = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/worldMapBackground.png');
+    bearBackground = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/bearBackground.png');
+    deerBackground = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/deerBackground.png');
+    squirrelBackground = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/squirrelBackground.png');
+    homeBackground = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/homeBackground.png');
+    mailBackground = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/mailBackground.png');
+    postOfficeBackground = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/postOfficeBackground.png');
 
-    bear = loadImage('/assets/bear.png');
-    deer = loadImage('/assets/deer.png');
-    squirrel = loadImage('/assets/squirrel.png');
-    lock = loadImage('/assets/lock.png');
+    bear = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/bear.png');
+    deer = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/deer.png');
+    squirrel = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/squirrel.png');
+    lock = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/lock.png');
 
-    worldMapIcon = loadImage('/assets/worldMapIcon.png');
-    shopIcon = loadImage('/assets/shopIcon.png');
-    mailIcon = loadImage('/assets/mailIcon.png');
-    postOfficeIcon = loadImage('/assets/postOfficeIcon.png');
+    worldMapIcon = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/worldMapIcon.png');
+    shopIcon = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/shopIcon.png');
+    mailIcon = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/mailIcon.png');
+    postOfficeIcon = loadImage('https://kwong09.github.io/critter-mail-delivery/assets/postOfficeIcon.png');
 
-    gomgomFont = loadFont('/assets/gomgomFont.ttf');
+    gomgomFont = loadFont('https://kwong09.github.io/critter-mail-delivery/assets/gomgomFont.ttf');
 }
 
 function draw() {
