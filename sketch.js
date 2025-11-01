@@ -1,9 +1,11 @@
 let money = 0;
 let screen = "home";
-let mailOwners = ["bear", "squirrel", "deer"];
-let currentMailOwner = mailOwners[0];
+let mailOwners = ["bear", "deer", "squirrel"];
 let bunny, ground, forestBunny;
 let characterTalking = "";
+let characterLetter = ["Guess who this letter is for! \n\n To: my best friend \n HOW ARE YOU DOING? I know we live right next\n door to each other but I have had this BIG\n idea brewing up! I know you love doing our weekly\n farmer's market run, so here is my proposal: \nwe sell our own food! Are you interested in \ntrying to do this with me? OK BYE! \n (P.S. I promise there will be NO ants on a log)", "Guess who this letter is for! \n\n To: mother nature!!\n HIHIHI!!! Sorry for bothering you, but I saw that you have\n SUCH LOVELY plants at your garden! I wanted to start \n growing my own because I might start selling at \nthe local farmer's market, but I definitely do\n not have a green thumb. I would love some of \nyour advice!! Bye!!!", "Guess who this letter is for! \n\n To: loud neighbor... \nHello, lately the neighborhood has gotten a bit loud.... \ndo you think you can please turn down the music \nduring parties? I understand you love to host them,\n but my plants need some quiet time as well. \nSorry. Thank you!"];
+let letterValue = 0;
+let currentMailOwner = mailOwners[letterValue];
 
 function setup() {
     createCanvas(800, 500);
@@ -12,10 +14,11 @@ function setup() {
 
     // home page sprites
 
+    textSize(20);
     startButton = new Sprite(-500, -500, 150, 50);
     startButton.text = "start";
     startButton.collider = "static";
-    startButton.fill = "pink";
+    startButton.fill = "#FDEBDE";
 
     //load animations
     bunnyRight = loadAni('/assets/bunnyRight.gif');
@@ -30,25 +33,39 @@ function setup() {
     deerHome = loadImage('/assets/deerHome.png');
     cloudyBackground = loadImage('/assets/cloudyBackground.png');
     forestBackground = loadImage('/assets/forestBackground.png');
+    worldMapBackground = loadImage('/assets/worldMapBackground.png');
+    bearBackground = loadImage('/assets/bearBackground.png');
+    deerBackground = loadImage('/assets/deerBackground.png');
+    squirrelBackground = loadImage('/assets/squirrelBackground.png');
+    homeBackground = loadImage('/assets/homeBackground.png');
+    mailBackground = loadImage('/assets/mailBackground.png');
+    postOfficeBackground = loadImage('/assets/postOfficeBackground.png');
 
     bear = loadImage('/assets/bear.png');
     deer = loadImage('/assets/deer.png');
     squirrel = loadImage('/assets/squirrel.png');
+    lock = loadImage('/assets/lock.png');
 
     worldMapIcon = loadImage('/assets/worldMapIcon.png');
     shopIcon = loadImage('/assets/shopIcon.png');
     mailIcon = loadImage('/assets/mailIcon.png');
+    postOfficeIcon = loadImage('/assets/postOfficeIcon.png');
+
+    gomgomFont = loadFont('/assets/gomgomFont.ttf');
 }
 
 function draw() {
     clear();
+    textFont(gomgomFont);
+    textSize(20);
+    textAlign(CENTER, CENTER);
 
     if (screen == "home") {
-        background('pink');
+        background(homeBackground);
 
         // position start button
-        startButton.x = width / 2;
-        startButton.y = 100;
+        startButton.x = 550;
+        startButton.y = 350;
 
         // changes cursor
         cursorHovering(startButton);
@@ -61,18 +78,19 @@ function draw() {
 
             mainPlazaScreen("open");
 
-            postOfficeButton = new Sprite(-1000, -1000, 50, 50);
+            postOfficeButton = new Sprite(-1000, -1000, 80, 80);
             postOfficeButton.collider = 'static';
-            postOfficeButton.fill = '#e82626ff';
+            postOfficeButton.image = postOfficeIcon;
+            postOfficeButton.ani.scale = 0.08;
         }
     }
 
     if (screen == "mainPlaza") {
-        background('lightblue');
+        background(cloudyBackground);
         text("$" + money, 750, 50);
         
         mouse.cursor = 'default';
-        text("X Value: " + bunny.x, 50, 50);
+        // text("X Value: " + bunny.x, 50, 50);
         // camera follows bunny
         camera.x = bunny.x + 100;
         ground.x = camera.x; 
@@ -90,7 +108,7 @@ function draw() {
     }
 
     if (screen == "postOffice") {
-        background("lightyellow");
+        background(postOfficeBackground);
         text("$" + money, 750, 50);
         
         menuBar.draw();
@@ -119,10 +137,14 @@ function draw() {
     }
 
     if (screen == "worldMap") {
-        background("#5dc0d6ff");
+        background(worldMapBackground);
         forestMap.draw();
         underwaterMap.draw();
+        underwaterMap.image = lock;
+        underwaterMap.ani.scale = 0.08;
         desertMap.draw();
+        desertMap.image = lock;
+        desertMap.ani.scale = 0.08;
         mouse.cursor = 'default';
 
         if (forestMap.mouse.presses()) {
@@ -141,7 +163,7 @@ function draw() {
         background(forestBackground);
         text("$" + money, 750, 50);
 
-        text("X Value: " + forestBunny.x, 50, 50);
+        // text("X Value: " + forestBunny.x, 50, 50);
         // camera follows bunny
         camera.x = forestBunny.x + 100;
         forestGround.x = camera.x; 
@@ -168,6 +190,7 @@ function draw() {
             forestMapScreen("close");
             screen = "talkingScreen";
             talkingScreen("open");
+            speechBubble.text = "Hello there! I'm Mr. Razzle Beary, but you\ncan just call me Beary ;) On the weekends,\n I love to go to the farmers' market with my \n BEST friend in the whole wide world, \n Nutmeg! My favorite hobby is to try new snacks \n and flavors of all kinds! However, I cannot bring \n myself to eat ants on a log.... Ants are my friends!";
 
             talkingCharacter.image = bear;
             talkingCharacter.ani.scale = 0.5;
@@ -176,6 +199,7 @@ function draw() {
             forestMapScreen("close");
             screen = "talkingScreen";
             talkingScreen("open");
+            speechBubble.text = "Hello! I'm Jane Doe and I'm known as the\n nature expert around here. I'm happiest \nwhen I'm at the plant nursery or going\n bird watching. I love staying indoors, especially\n looking through my windows. I truly dislike\n loud noises. I believe that the best life\n is a quiet life! Um.. well goodbye!";
 
             talkingCharacter.image = deer;
             talkingCharacter.ani.scale = 0.5;
@@ -184,6 +208,7 @@ function draw() {
             forestMapScreen("close");
             screen = "talkingScreen";
             talkingScreen("open");
+            speechBubble.text = "Heyo! I'm Nutmeg, but my mom calls me Squeak,\n speaking of which where is my squeaky toy?\n Wait who are you again? Sorry, I'm Nutmeg!\n Um... well my best friend is Mr. Razzle Beary\n (my neighbor). I LOVE LOVE LOVE going\n on adventures, hosting parties, and especially... \ngoing on adventures! Did I say that already?";
 
             talkingCharacter.image = squirrel;
             talkingCharacter.ani.scale = 0.5;
@@ -200,7 +225,14 @@ function draw() {
     }
 
     if (screen == "talkingScreen") {
-        background("#5dc0d6ff");
+        if (characterTalking == "bear") {
+            background(bearBackground);
+        } else if (characterTalking == "deer") {
+            background(deerBackground);
+        } else if (characterTalking == "squirrel") {
+            background(squirrelBackground);
+        }
+
         talkingCharacter.draw();
         talkingGiveMail.draw();
         speechBubble.draw();
@@ -220,6 +252,9 @@ function draw() {
                 screen = "postOffice";
                 postOfficeScreen("openAgain");
 
+                letterValue = (int(random(0, 3)));
+                currentMailOwner = mailOwners[letterValue];
+
             } else {
                 money -= 50;
                 talkingScreen("close");
@@ -231,9 +266,10 @@ function draw() {
     }
 
     if (screen == "mail") {
-        background("#f8eac7ff");
+        background(mailBackground);
         returnToOffice.draw();
-        text("This is your mail \n more mail!", 50, 50);
+        textAlign(CENTER, CENTER);
+        text(characterLetter[letterValue], width / 2, height / 2 - 70);
 
         if (returnToOffice.mouse.presses()) {
             mailScreen("close");
@@ -305,7 +341,7 @@ function postOfficeScreen(openClose) {
     if (openClose == "open") {
         menuBar = new Sprite(400, 450, 800, 200)
         menuBar.collider = 's';
-        menuBar.color = "lightgreen";
+        menuBar.color = "#b9d5ffff";
         menuBar.friction = 0;
         menuBar.layer = -1;
 
@@ -317,7 +353,7 @@ function postOfficeScreen(openClose) {
 
         shop = new Sprite(400, 425, 100, 100);
         shop.collider = 's';
-        shop.image = shopIcon;
+        shop.image = lock;
         shop.ani.scale = 0.08;
         shop.layer = 4;
 
@@ -348,15 +384,15 @@ function postOfficeScreen(openClose) {
 
 function worldMapScreen(openClose) {
     if (openClose == "open") {
-        forestMap = new Sprite(300, 250, 75, 75);
+        forestMap = new Sprite(170, 310, 230, 190);
         forestMap.collider = 's';
-        forestMap.color = "#89d580ee";
+        forestMap.color = "rgba(255, 255, 255, 0)";
 
-        underwaterMap = new Sprite(400, 250, 75, 75);
+        underwaterMap = new Sprite(650, 300, 75, 75);
         underwaterMap.collider = 's';
         underwaterMap.color = "#cae1fdee";
 
-        desertMap = new Sprite(500, 250, 75, 75);
+        desertMap = new Sprite(410, 325, 75, 75);
         desertMap.collider = 's';
         desertMap.color = "#d6de8cee";
     } else if (openClose == "close") {
@@ -374,7 +410,7 @@ function forestMapScreen(openClose) {
         
         forestGround = new Sprite(width / 2, height - 60, 800, 120);
         forestGround.collider = 's';
-        forestGround.color = "lightgreen";
+        forestGround.color = "#456e24ff";
         forestGround.friction = 0;
         forestGround.layer = 0;
 
@@ -397,7 +433,7 @@ function forestMapScreen(openClose) {
         forestTalk1.collider = 's';
         forestTalk1.color = "white";
         forestTalk1.layer = 4;
-        forestTalk1.text = 'Talk to Forest Character 1';
+        forestTalk1.text = 'Talk to Mr. Razzle Beary';
 
         forestHome2 = new Sprite(1600, 230, 600, 300);
         forestHome2.collider = 'n';
@@ -409,7 +445,7 @@ function forestMapScreen(openClose) {
         forestTalk2.collider = 's';
         forestTalk2.color = "white";
         forestTalk2.layer = 4;
-        forestTalk2.text = 'Talk to Forest Character 2';
+        forestTalk2.text = 'Talk to Mrs. Jane Doe';
 
         forestHome3 = new Sprite(2300, 230, 600, 300);
         forestHome3.collider = 'n';
@@ -421,7 +457,7 @@ function forestMapScreen(openClose) {
         forestTalk3.collider = 's';
         forestTalk3.color = "white";
         forestTalk3.layer = 4;
-        forestTalk3.text = 'Talk to Forest Character 3';
+        forestTalk3.text = 'Talk to Nutmeg';
         
         camera.x = 400;
         camera.y = 250;
@@ -457,16 +493,19 @@ function talkingScreen(openClose) {
         talkingCharacter.image = bear;
         talkingCharacter.ani.scale = 0.5;
 
-        speechBubble = new Sprite(550, 250, 350, 250);
+        speechBubble = new Sprite(550, 250, 380, 250);
         speechBubble.collider = 's';
+        speechBubble.color = "#ffeee4ff";
 
         talkingGiveMail = new Sprite(550, 450, 160, 50);
         talkingGiveMail.text = "give mail";
         talkingGiveMail.collider = 's';
+        talkingGiveMail.color = "#ffeee4ff";
 
         backButton = new Sprite(700, 60, 100, 50);
         backButton.text = "back";
         backButton.collider = 's';
+        backButton.color = "#ffeee4ff";
         
         camera.x = 0;
         camera.y = 0;
@@ -480,7 +519,7 @@ function talkingScreen(openClose) {
 
 function mailScreen(openClose) {
     if (openClose == "open") { 
-        returnToOffice = new Sprite(width / 2, 425, 150, 75);
+        returnToOffice = new Sprite(width / 2, 425, 180, 75);
         returnToOffice.collider = 's';
         returnToOffice.color = "white";
         returnToOffice.text = 'Return to Post Office';
