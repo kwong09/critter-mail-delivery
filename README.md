@@ -26,6 +26,7 @@ Hi! My name is Kayla, and I absolutely love creating heartwarming games filled w
 **Languages:** HTML, CSS, and JavaScript 
 **All art and illustrations:** drawn by Kayla (me!)  
 **Created for:** Hack Club (Athena Award)
+[![Athena Award Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Faward.athena.hackclub.com%2Fapi%2Fbadge)](https://award.athena.hackclub.com?utm_source=readme)
 
 
 
