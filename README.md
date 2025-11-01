@@ -1,3 +1,16 @@
+# Critter Mail Delivery 💌🌿
+Join Bunny on a cozy adventure through the forest, delivering letters to their animal friends! Meet cheerful critters, explore maps, and have fun delivering letters. If you love wholesome stories, cute art, and peaceful vibes, this game is for you! 🐇💌
+
+## Author's Note
+Hi! My name is Kayla, and I absolutely love creating heartwarming games filled with soft colors and friendly characters. I drew all of the art in this game—from the silly forest friends to the little envelopes Bunny delivers! Making *Critter Mail Delivery* was such a joy, and I hope it brings a smile to your face too :)
+
+## Extra Information
+**Languages:** HTML, CSS, and JavaScript 
+**All art and illustrations:** drawn by Kayla (me!)  
+**Created for:** Hack Club (Athena Award)
+
+
+
 # p5play template
 
 This is a template repo that includes the following libraries:
